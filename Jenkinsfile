@@ -10,6 +10,7 @@ pipeline {
                 }
             }
             steps {
+                echo 'Starting Build Stage'
                 sh '''
                     ls -la
                     node --version
@@ -20,5 +21,24 @@ pipeline {
                 '''
             }
         }
+        
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                
+                echo 'Starting Build Stage'
+
+                sh '''
+                    test -p build/index.html
+                    npm test a
+                '''
+            }
+        }
+
     }
 }
